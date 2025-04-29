@@ -72,7 +72,10 @@ jobs:
         shell: bash
         run: |
           export PATH=$GITHUB_WORKSPACE/toolchain/bin:$PATH
-          arm-none-linux-gnueabihf-gcc --print-file-name=libc.so.6 | grep GLIBC_ | head -n 1
+          
+          LIBC_PATH=$(arm-none-linux-gnueabihf-gcc --print-file-name=libc.so.6)
+          arm-none-linux-gnueabihf-readelf -s "$LIBC_PATH" | grep -m 1 'GLIBC_'
+
           arm-none-linux-gnueabihf-gcc --version
           
       - name: build arm-linux-gnueabihf
