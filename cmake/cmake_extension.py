@@ -45,47 +45,41 @@ def enable_alsa():
 
 def get_binaries():
     binaries = [
-        "sherpa-onnx",
+        # "sherpa-onnx",
         "sherpa-onnx-keyword-spotter",
-        "sherpa-onnx-microphone",
-        "sherpa-onnx-microphone-offline",
-        "sherpa-onnx-microphone-offline-audio-tagging",
-        "sherpa-onnx-microphone-offline-speaker-identification",
-        "sherpa-onnx-offline",
-        "sherpa-onnx-offline-audio-tagging",
-        "sherpa-onnx-offline-denoiser",
-        "sherpa-onnx-offline-language-identification",
-        "sherpa-onnx-offline-punctuation",
-        "sherpa-onnx-offline-speaker-diarization",
-        "sherpa-onnx-offline-tts",
-        "sherpa-onnx-offline-tts-play",
-        "sherpa-onnx-offline-websocket-server",
-        "sherpa-onnx-online-punctuation",
-        "sherpa-onnx-online-websocket-client",
-        "sherpa-onnx-online-websocket-server",
-        "sherpa-onnx-vad",
-        "sherpa-onnx-vad-microphone",
-        "sherpa-onnx-vad-microphone-offline-asr",
-        "sherpa-onnx-vad-with-offline-asr",
+        # "sherpa-onnx-microphone",
+        # "sherpa-onnx-microphone-offline",
+        # "sherpa-onnx-microphone-offline-audio-tagging",
+        # "sherpa-onnx-microphone-offline-speaker-identification",
+        # "sherpa-onnx-offline",
+        # "sherpa-onnx-offline-audio-tagging",
+        # "sherpa-onnx-offline-denoiser",
+        # "sherpa-onnx-offline-language-identification",
+        # "sherpa-onnx-offline-punctuation",
+        # "sherpa-onnx-offline-speaker-diarization",
+        # "sherpa-onnx-offline-tts",
+        # "sherpa-onnx-offline-tts-play",
+        # "sherpa-onnx-offline-websocket-server",
+        # "sherpa-onnx-online-punctuation",
+        # "sherpa-onnx-online-websocket-client",
+        # "sherpa-onnx-online-websocket-server",
+        # "sherpa-onnx-vad",
+        # "sherpa-onnx-vad-microphone",
+        # "sherpa-onnx-vad-microphone-offline-asr",
+        # "sherpa-onnx-vad-with-offline-asr",
     ]
 
     if enable_alsa():
         binaries += [
-            "sherpa-onnx-alsa",
-            "sherpa-onnx-alsa-offline",
-            "sherpa-onnx-alsa-offline-audio-tagging",
-            "sherpa-onnx-alsa-offline-speaker-identification",
-            "sherpa-onnx-offline-tts-play-alsa",
-            "sherpa-onnx-vad-alsa",
-            "sherpa-onnx-vad-alsa-offline-asr",
+            # "sherpa-onnx-alsa",
+            # "sherpa-onnx-alsa-offline",
+            # "sherpa-onnx-alsa-offline-audio-tagging",
+            # "sherpa-onnx-alsa-offline-speaker-identification",
+            # "sherpa-onnx-offline-tts-play-alsa",
+            # "sherpa-onnx-vad-alsa",
+            # "sherpa-onnx-vad-alsa-offline-asr",
         ]
 
-    if is_windows():
-        binaries += [
-            "onnxruntime.dll",
-            "sherpa-onnx-c-api.dll",
-            "sherpa-onnx-cxx-api.dll",
-        ]
 
     return binaries
 

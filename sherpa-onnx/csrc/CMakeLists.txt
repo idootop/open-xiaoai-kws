@@ -318,46 +318,46 @@ if(NOT WIN32 AND NOT SHERPA_ONNX_ENABLE_WASM AND CMAKE_SYSTEM_NAME STREQUAL Linu
 endif()
 
 if(SHERPA_ONNX_ENABLE_BINARY)
-  add_executable(sherpa-onnx sherpa-onnx.cc)
+  # add_executable(sherpa-onnx sherpa-onnx.cc)
   add_executable(sherpa-onnx-keyword-spotter sherpa-onnx-keyword-spotter.cc)
-  add_executable(sherpa-onnx-offline sherpa-onnx-offline.cc)
-  add_executable(sherpa-onnx-offline-audio-tagging sherpa-onnx-offline-audio-tagging.cc)
-  add_executable(sherpa-onnx-offline-denoiser sherpa-onnx-offline-denoiser.cc)
-  add_executable(sherpa-onnx-offline-language-identification sherpa-onnx-offline-language-identification.cc)
-  add_executable(sherpa-onnx-offline-parallel sherpa-onnx-offline-parallel.cc)
-  add_executable(sherpa-onnx-offline-punctuation sherpa-onnx-offline-punctuation.cc)
-  add_executable(sherpa-onnx-online-punctuation sherpa-onnx-online-punctuation.cc)
-  add_executable(sherpa-onnx-vad sherpa-onnx-vad.cc)
+  # add_executable(sherpa-onnx-offline sherpa-onnx-offline.cc)
+  # add_executable(sherpa-onnx-offline-audio-tagging sherpa-onnx-offline-audio-tagging.cc)
+  # add_executable(sherpa-onnx-offline-denoiser sherpa-onnx-offline-denoiser.cc)
+  # add_executable(sherpa-onnx-offline-language-identification sherpa-onnx-offline-language-identification.cc)
+  # add_executable(sherpa-onnx-offline-parallel sherpa-onnx-offline-parallel.cc)
+  # add_executable(sherpa-onnx-offline-punctuation sherpa-onnx-offline-punctuation.cc)
+  # add_executable(sherpa-onnx-online-punctuation sherpa-onnx-online-punctuation.cc)
+  # add_executable(sherpa-onnx-vad sherpa-onnx-vad.cc)
 
   if(SHERPA_ONNX_ENABLE_TTS)
-    add_executable(sherpa-onnx-offline-tts sherpa-onnx-offline-tts.cc)
+    # add_executable(sherpa-onnx-offline-tts sherpa-onnx-offline-tts.cc)
   endif()
 
   if(SHERPA_ONNX_ENABLE_SPEAKER_DIARIZATION)
-    add_executable(sherpa-onnx-offline-speaker-diarization sherpa-onnx-offline-speaker-diarization.cc)
+    # add_executable(sherpa-onnx-offline-speaker-diarization sherpa-onnx-offline-speaker-diarization.cc)
   endif()
 
   set(main_exes
-    sherpa-onnx
+    # sherpa-onnx
     sherpa-onnx-keyword-spotter
-    sherpa-onnx-offline
-    sherpa-onnx-offline-audio-tagging
-    sherpa-onnx-offline-denoiser
-    sherpa-onnx-offline-language-identification
-    sherpa-onnx-offline-parallel
-    sherpa-onnx-offline-punctuation
-    sherpa-onnx-online-punctuation
-    sherpa-onnx-vad
+    # sherpa-onnx-offline
+    # sherpa-onnx-offline-audio-tagging
+    # sherpa-onnx-offline-denoiser
+    # sherpa-onnx-offline-language-identification
+    # sherpa-onnx-offline-parallel
+    # sherpa-onnx-offline-punctuation
+    # sherpa-onnx-online-punctuation
+    # sherpa-onnx-vad
   )
   if(SHERPA_ONNX_ENABLE_TTS)
     list(APPEND main_exes
-      sherpa-onnx-offline-tts
+      # sherpa-onnx-offline-tts
     )
   endif()
 
   if(SHERPA_ONNX_ENABLE_SPEAKER_DIARIZATION)
     list(APPEND main_exes
-      sherpa-onnx-offline-speaker-diarization
+      # sherpa-onnx-offline-speaker-diarization
     )
   endif()
 
@@ -391,32 +391,32 @@ if(SHERPA_ONNX_ENABLE_BINARY)
 endif()
 
 if(SHERPA_ONNX_HAS_ALSA AND SHERPA_ONNX_ENABLE_BINARY)
-  add_executable(sherpa-onnx-alsa sherpa-onnx-alsa.cc alsa.cc)
-  add_executable(sherpa-onnx-alsa-offline sherpa-onnx-alsa-offline.cc alsa.cc)
-  add_executable(sherpa-onnx-alsa-offline-audio-tagging sherpa-onnx-alsa-offline-audio-tagging.cc alsa.cc)
-  add_executable(sherpa-onnx-alsa-offline-speaker-identification sherpa-onnx-alsa-offline-speaker-identification.cc alsa.cc)
+  # add_executable(sherpa-onnx-alsa sherpa-onnx-alsa.cc alsa.cc)
+  # add_executable(sherpa-onnx-alsa-offline sherpa-onnx-alsa-offline.cc alsa.cc)
+  # add_executable(sherpa-onnx-alsa-offline-audio-tagging sherpa-onnx-alsa-offline-audio-tagging.cc alsa.cc)
+  # add_executable(sherpa-onnx-alsa-offline-speaker-identification sherpa-onnx-alsa-offline-speaker-identification.cc alsa.cc)
   add_executable(sherpa-onnx-keyword-spotter-alsa sherpa-onnx-keyword-spotter-alsa.cc alsa.cc)
-  add_executable(sherpa-onnx-vad-alsa sherpa-onnx-vad-alsa.cc alsa.cc)
-  add_executable(sherpa-onnx-vad-alsa-offline-asr sherpa-onnx-vad-alsa-offline-asr.cc alsa.cc)
+  # add_executable(sherpa-onnx-vad-alsa sherpa-onnx-vad-alsa.cc alsa.cc)
+  # add_executable(sherpa-onnx-vad-alsa-offline-asr sherpa-onnx-vad-alsa-offline-asr.cc alsa.cc)
 
 
   if(SHERPA_ONNX_ENABLE_TTS)
-    add_executable(sherpa-onnx-offline-tts-play-alsa sherpa-onnx-offline-tts-play-alsa.cc alsa-play.cc)
+    # add_executable(sherpa-onnx-offline-tts-play-alsa sherpa-onnx-offline-tts-play-alsa.cc alsa-play.cc)
   endif()
 
   set(exes
-    sherpa-onnx-alsa
-    sherpa-onnx-alsa-offline
-    sherpa-onnx-alsa-offline-speaker-identification
+    # sherpa-onnx-alsa
+    # sherpa-onnx-alsa-offline
+    # sherpa-onnx-alsa-offline-speaker-identification
     sherpa-onnx-keyword-spotter-alsa
-    sherpa-onnx-vad-alsa
-    sherpa-onnx-vad-alsa-offline-asr
-    sherpa-onnx-alsa-offline-audio-tagging
+    # sherpa-onnx-vad-alsa
+    # sherpa-onnx-vad-alsa-offline-asr
+    # sherpa-onnx-alsa-offline-audio-tagging
   )
 
   if(SHERPA_ONNX_ENABLE_TTS)
     list(APPEND exes
-      sherpa-onnx-offline-tts-play-alsa
+      # sherpa-onnx-offline-tts-play-alsa
     )
   endif()
 
@@ -457,10 +457,10 @@ endif()
 
 if(SHERPA_ONNX_ENABLE_PORTAUDIO AND SHERPA_ONNX_ENABLE_BINARY)
   if(SHERPA_ONNX_ENABLE_TTS)
-    add_executable(sherpa-onnx-offline-tts-play
-      sherpa-onnx-offline-tts-play.cc
-      microphone.cc
-    )
+    # add_executable(sherpa-onnx-offline-tts-play
+    #   sherpa-onnx-offline-tts-play.cc
+    #   microphone.cc
+    # )
   endif()
 
   add_executable(sherpa-onnx-keyword-spotter-microphone
@@ -468,54 +468,54 @@ if(SHERPA_ONNX_ENABLE_PORTAUDIO AND SHERPA_ONNX_ENABLE_BINARY)
     microphone.cc
   )
 
-  add_executable(sherpa-onnx-microphone
-    sherpa-onnx-microphone.cc
-    microphone.cc
-  )
+  # add_executable(sherpa-onnx-microphone
+  #   sherpa-onnx-microphone.cc
+  #   microphone.cc
+  # )
 
 
-  add_executable(sherpa-onnx-microphone-offline
-    sherpa-onnx-microphone-offline.cc
-    microphone.cc
-  )
+  # add_executable(sherpa-onnx-microphone-offline
+  #   sherpa-onnx-microphone-offline.cc
+  #   microphone.cc
+  # )
 
-  add_executable(sherpa-onnx-vad-microphone
-    sherpa-onnx-vad-microphone.cc
-    microphone.cc
-  )
+  # add_executable(sherpa-onnx-vad-microphone
+  #   sherpa-onnx-vad-microphone.cc
+  #   microphone.cc
+  # )
 
-  add_executable(sherpa-onnx-vad-with-offline-asr
-    sherpa-onnx-vad-with-offline-asr.cc
-  )
+  # add_executable(sherpa-onnx-vad-with-offline-asr
+  #   sherpa-onnx-vad-with-offline-asr.cc
+  # )
 
-  add_executable(sherpa-onnx-vad-microphone-offline-asr
-    sherpa-onnx-vad-microphone-offline-asr.cc
-    microphone.cc
-  )
+  # add_executable(sherpa-onnx-vad-microphone-offline-asr
+  #   sherpa-onnx-vad-microphone-offline-asr.cc
+  #   microphone.cc
+  # )
 
-  add_executable(sherpa-onnx-microphone-offline-speaker-identification
-    sherpa-onnx-microphone-offline-speaker-identification.cc
-    microphone.cc
-  )
+  # add_executable(sherpa-onnx-microphone-offline-speaker-identification
+  #   sherpa-onnx-microphone-offline-speaker-identification.cc
+  #   microphone.cc
+  # )
 
-  add_executable(sherpa-onnx-microphone-offline-audio-tagging
-    sherpa-onnx-microphone-offline-audio-tagging.cc
-    microphone.cc
-  )
+  # add_executable(sherpa-onnx-microphone-offline-audio-tagging
+  #   sherpa-onnx-microphone-offline-audio-tagging.cc
+  #   microphone.cc
+  # )
 
   set(exes
     sherpa-onnx-keyword-spotter-microphone
-    sherpa-onnx-microphone
-    sherpa-onnx-microphone-offline
-    sherpa-onnx-microphone-offline-audio-tagging
-    sherpa-onnx-microphone-offline-speaker-identification
-    sherpa-onnx-vad-microphone
-    sherpa-onnx-vad-microphone-offline-asr
-    sherpa-onnx-vad-with-offline-asr
+    # sherpa-onnx-microphone
+    # sherpa-onnx-microphone-offline
+    # sherpa-onnx-microphone-offline-audio-tagging
+    # sherpa-onnx-microphone-offline-speaker-identification
+    # sherpa-onnx-vad-microphone
+    # sherpa-onnx-vad-microphone-offline-asr
+    # sherpa-onnx-vad-with-offline-asr
   )
   if(SHERPA_ONNX_ENABLE_TTS)
     list(APPEND exes
-      sherpa-onnx-offline-tts-play
+      # sherpa-onnx-offline-tts-play
     )
   endif()
 
@@ -547,59 +547,59 @@ if(SHERPA_ONNX_ENABLE_WEBSOCKET AND SHERPA_ONNX_ENABLE_BINARY)
   add_definitions(-DASIO_STANDALONE)
   add_definitions(-D_WEBSOCKETPP_CPP11_STL_)
 
-  add_executable(sherpa-onnx-online-websocket-server
-    online-websocket-server-impl.cc
-    online-websocket-server.cc
-  )
-  target_link_libraries(sherpa-onnx-online-websocket-server sherpa-onnx-core)
+  # add_executable(sherpa-onnx-online-websocket-server
+  #   online-websocket-server-impl.cc
+  #   online-websocket-server.cc
+  # )
+  # target_link_libraries(sherpa-onnx-online-websocket-server sherpa-onnx-core)
 
-  add_executable(sherpa-onnx-online-websocket-client
-    online-websocket-client.cc
-  )
-  target_link_libraries(sherpa-onnx-online-websocket-client sherpa-onnx-core)
+  # add_executable(sherpa-onnx-online-websocket-client
+  #   online-websocket-client.cc
+  # )
+  # target_link_libraries(sherpa-onnx-online-websocket-client sherpa-onnx-core)
 
-  if(NOT WIN32)
-    target_compile_options(sherpa-onnx-online-websocket-server PRIVATE -Wno-deprecated-declarations)
+  # if(NOT WIN32)
+  #   target_compile_options(sherpa-onnx-online-websocket-server PRIVATE -Wno-deprecated-declarations)
 
-    target_compile_options(sherpa-onnx-online-websocket-client PRIVATE -Wno-deprecated-declarations)
-  endif()
+  #   target_compile_options(sherpa-onnx-online-websocket-client PRIVATE -Wno-deprecated-declarations)
+  # endif()
 
-  # For offline websocket
-  add_executable(sherpa-onnx-offline-websocket-server
-    offline-websocket-server-impl.cc
-    offline-websocket-server.cc
-  )
-  target_link_libraries(sherpa-onnx-offline-websocket-server sherpa-onnx-core)
+  # # For offline websocket
+  # add_executable(sherpa-onnx-offline-websocket-server
+  #   offline-websocket-server-impl.cc
+  #   offline-websocket-server.cc
+  # )
+  # target_link_libraries(sherpa-onnx-offline-websocket-server sherpa-onnx-core)
 
-  if(NOT WIN32)
-    target_compile_options(sherpa-onnx-offline-websocket-server PRIVATE -Wno-deprecated-declarations)
-  endif()
+  # if(NOT WIN32)
+  #   target_compile_options(sherpa-onnx-offline-websocket-server PRIVATE -Wno-deprecated-declarations)
+  # endif()
 
-  if(NOT WIN32)
-    target_link_libraries(sherpa-onnx-online-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib")
-    target_link_libraries(sherpa-onnx-online-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../../../sherpa_onnx/lib")
+  # if(NOT WIN32)
+  #   target_link_libraries(sherpa-onnx-online-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib")
+  #   target_link_libraries(sherpa-onnx-online-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../../../sherpa_onnx/lib")
 
-    target_link_libraries(sherpa-onnx-online-websocket-client "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib")
-    target_link_libraries(sherpa-onnx-online-websocket-client "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../../../sherpa_onnx/lib")
+  #   target_link_libraries(sherpa-onnx-online-websocket-client "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib")
+  #   target_link_libraries(sherpa-onnx-online-websocket-client "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../../../sherpa_onnx/lib")
 
-    target_link_libraries(sherpa-onnx-offline-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib")
-    target_link_libraries(sherpa-onnx-offline-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../../../sherpa_onnx/lib")
+  #   target_link_libraries(sherpa-onnx-offline-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib")
+  #   target_link_libraries(sherpa-onnx-offline-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../../../sherpa_onnx/lib")
 
-    if(SHERPA_ONNX_ENABLE_PYTHON AND NOT WIN32)
-      target_link_libraries(sherpa-onnx-online-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib/python${PYTHON_VERSION}/site-packages/sherpa_onnx/lib")
-      target_link_libraries(sherpa-onnx-online-websocket-client "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib/python${PYTHON_VERSION}/site-packages/sherpa_onnx/lib")
-      target_link_libraries(sherpa-onnx-offline-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib/python${PYTHON_VERSION}/site-packages/sherpa_onnx/lib")
-    endif()
-  endif()
+  #   if(SHERPA_ONNX_ENABLE_PYTHON AND NOT WIN32)
+  #     target_link_libraries(sherpa-onnx-online-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib/python${PYTHON_VERSION}/site-packages/sherpa_onnx/lib")
+  #     target_link_libraries(sherpa-onnx-online-websocket-client "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib/python${PYTHON_VERSION}/site-packages/sherpa_onnx/lib")
+  #     target_link_libraries(sherpa-onnx-offline-websocket-server "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib/python${PYTHON_VERSION}/site-packages/sherpa_onnx/lib")
+  #   endif()
+  # endif()
 
-  install(
-    TARGETS
-      sherpa-onnx-online-websocket-server
-      sherpa-onnx-online-websocket-client
-      sherpa-onnx-offline-websocket-server
-    DESTINATION
-      bin
-  )
+  # install(
+  #   TARGETS
+  #     sherpa-onnx-online-websocket-server
+  #     sherpa-onnx-online-websocket-client
+  #     sherpa-onnx-offline-websocket-server
+  #   DESTINATION
+  #     bin
+  # )
 endif()
 
 if(SHERPA_ONNX_ENABLE_TESTS)
