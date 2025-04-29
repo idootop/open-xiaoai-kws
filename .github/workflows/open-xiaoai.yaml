@@ -77,6 +77,8 @@ jobs:
           arm-none-linux-gnueabihf-gcc --print-file-name=libc.so.6
           arm-none-linux-gnueabihf-readelf -s $(arm-none-linux-gnueabihf-gcc --print-file-name=libc.so.6) | grep GLIBC_
 
+          exit 1
+
       - name: build arm-linux-gnueabihf
         shell: bash
         run: |
