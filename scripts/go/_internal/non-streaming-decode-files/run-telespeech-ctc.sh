@@ -1,1 +1,0 @@
-../../../../go-api-examples/non-streaming-decode-files/run-telespeech-ctc.sh

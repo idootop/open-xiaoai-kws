@@ -69,6 +69,7 @@ swift-api-examples/k2fsa-*
 run-*.sh
 two-pass-*.sh
 build-*
+!build-open-xiaoai.sh
 
 ## User settings
 xcuserdata/
@@ -142,3 +143,4 @@ README-DEV.txt
 .idea
 sherpa-onnx-dolphin-base-ctc-multi-lang-int8-2025-04-02
 dict
+.mypy_cache

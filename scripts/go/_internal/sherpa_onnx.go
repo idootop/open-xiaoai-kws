@@ -1,1 +1,0 @@
-../sherpa_onnx.go

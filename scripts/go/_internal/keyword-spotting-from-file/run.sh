@@ -1,1 +1,0 @@
-../../../../go-api-examples/keyword-spotting-from-file/run.sh

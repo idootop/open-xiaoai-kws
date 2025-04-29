@@ -1,1 +1,0 @@
-../../../../go-api-examples/audio-tagging/main.go

@@ -1,1 +1,0 @@
-../../../../go-api-examples/vad-asr-paraformer/main.go

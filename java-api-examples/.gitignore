@@ -1,4 +1,0 @@
-lib
-hs_err*
-!run-*.sh
-./hotwords_cn.txt

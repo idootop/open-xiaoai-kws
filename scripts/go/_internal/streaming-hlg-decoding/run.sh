@@ -1,1 +1,0 @@
-../../../../go-api-examples/streaming-hlg-decoding/run.sh

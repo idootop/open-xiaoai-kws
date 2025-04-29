@@ -1,1 +1,0 @@
-../../../../go-api-examples/streaming-decode-files/main.go

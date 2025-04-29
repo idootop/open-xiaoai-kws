@@ -1,1 +1,0 @@
-../../../harmony-os/SherpaOnnxHar/sherpa_onnx/src/main/cpp/vad.cc

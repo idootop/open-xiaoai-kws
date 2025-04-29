@@ -83,7 +83,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: toolchain
-          key: gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf
+          key: gcc-arm-7.3-2018.05-x86_64-arm-linux-gnueabihf
 
       - name: Download toolchain
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
@@ -95,13 +95,15 @@ jobs:
           ls -lh arm-linux-gcc
 
           mkdir $GITHUB_WORKSPACE/toolchain
-          tar xvf ./arm-linux-gcc/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz --strip-components 1 -C $GITHUB_WORKSPACE/toolchain
+          tar xvf ./arm-linux-gcc/gcc-arm-7.3-2018.05-x86_64-arm-linux-gnueabihf.tar.xz --strip-components 1 -C $GITHUB_WORKSPACE/toolchain
 
       - name: Display toolchain info
         shell: bash
         run: |
           export PATH=$GITHUB_WORKSPACE/toolchain/bin:$PATH
-          arm-none-linux-gnueabihf-gcc --version
+          arm-linux-gnueabihf-gcc --version
+          arm-linux-gnueabihf-gcc -v 2>&1 | grep "gcc version"
+          arm-linux-gnueabihf-ldd --version
 
       - name: Display qemu-arm -h
         shell: bash

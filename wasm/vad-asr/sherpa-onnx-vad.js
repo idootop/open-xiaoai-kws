@@ -1,1 +1,0 @@
-../vad/sherpa-onnx-vad.js

@@ -1,1 +1,0 @@
-../../../../go-api-examples/speaker-identification/main.go

@@ -1,1 +1,0 @@
-../../../../go-api-examples/real-time-speech-recognition-from-microphone/run.sh

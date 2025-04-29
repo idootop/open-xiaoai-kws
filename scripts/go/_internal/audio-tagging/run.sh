@@ -1,1 +1,0 @@
-../../../../go-api-examples/audio-tagging/run.sh
