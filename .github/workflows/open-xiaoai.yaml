@@ -49,19 +49,6 @@ jobs:
         with:
           key: ${{ matrix.os }}-arm-${{ matrix.lib_type }}
 
-      - name: cache-qemu
-        id: cache-qemu
-        uses: actions/cache@v4
-        with:
-          path: qemu-install
-          key: qemu-arm-install-20220907
-
-      - name: install-qemu-build-deps
-        if: steps.cache-qemu.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install autoconf automake autotools-dev ninja-build libglib2.0-dev.
-
       - name: cache-toolchain
         id: cache-toolchain
         uses: actions/cache@v4
@@ -105,7 +92,7 @@ jobs:
             export BUILD_SHARED_LIBS=OFF
           fi
 
-          ./build-arm-linux-gnueabihf.sh
+          ./build-open-xiaoai.sh
 
           ls -lh build-arm-linux-gnueabihf/bin
           ls -lh build-arm-linux-gnueabihf/lib
