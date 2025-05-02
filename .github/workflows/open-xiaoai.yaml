@@ -71,7 +71,7 @@ jobs:
 
           arm-linux-gnueabihf-gcc --version
 
-          gcc -x c - <<<'int main(){return 0;}' -o test && objdump -T ./test | grep GLIBC_ | awk '{print $5}' | sort -V | tail -n1
+          gcc -x c - <<<'int main(){return 0;}' -o test && objdump -T ./test | grep GLIBC_
 
           exit 1
 
