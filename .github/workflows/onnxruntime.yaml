@@ -91,6 +91,8 @@ jobs:
         shell: bash
         run: |
           arm-linux-gnueabihf-gcc --version
+          cmake --version
+          exit 1
 
       - name: Display protoc info for ${{ env.ONNXRUNTIME_VERSION }}
         if: steps.cache-build-result.outputs.cache-hit != 'true'
