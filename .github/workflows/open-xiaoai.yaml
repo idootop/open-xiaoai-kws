@@ -73,8 +73,6 @@ jobs:
 
           gcc -x c - <<<'int main(){return 0;}' -o test && objdump -T ./test | grep GLIBC_
 
-          exit 1
-
       - name: build arm-linux-gnueabihf
         shell: bash
         run: |
