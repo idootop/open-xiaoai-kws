@@ -6,22 +6,22 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/arm-linux-gnueabihf.yaml'
-      - 'cmake/**'
-      - 'sherpa-onnx/csrc/*'
-      - 'sherpa-onnx/c-api/*'
-      - 'toolchains/arm-linux-gnueabihf.toolchain.cmake'
+      - ".github/workflows/arm-linux-gnueabihf.yaml"
+      - "cmake/**"
+      - "sherpa-onnx/csrc/*"
+      - "sherpa-onnx/c-api/*"
+      - "toolchains/arm-linux-gnueabihf.toolchain.cmake"
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+      - "v[0-9]+.[0-9]+.[0-9]+*"
   pull_request:
     branches:
       - master
     paths:
-      - '.github/workflows/arm-linux-gnueabihf.yaml'
-      - 'cmake/**'
-      - 'sherpa-onnx/csrc/*'
-      - 'sherpa-onnx/c-api/*'
-      - 'toolchains/arm-linux-gnueabihf.toolchain.cmake'
+      - ".github/workflows/arm-linux-gnueabihf.yaml"
+      - "cmake/**"
+      - "sherpa-onnx/csrc/*"
+      - "sherpa-onnx/c-api/*"
+      - "toolchains/arm-linux-gnueabihf.toolchain.cmake"
 
   workflow_dispatch:
 
@@ -54,30 +54,26 @@ jobs:
         uses: actions/cache@v4
         with:
           path: toolchain
-          key: gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf
+          key: gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf
 
       - name: Download toolchain
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          git lfs install
-          export GIT_CLONE_PROTECTION_ACTIVE=false
-          git clone https://huggingface.co/csukuangfj/arm-linux-gcc
-          ls -lh arm-linux-gcc
-
+          wget https://releases.linaro.org/components/toolchain/binaries/latest-7/arm-linux-gnueabihf/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz
           mkdir $GITHUB_WORKSPACE/toolchain
-          tar xvf ./arm-linux-gcc/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz --strip-components 1 -C $GITHUB_WORKSPACE/toolchain
+          tar xvf ./gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz --strip-components 1 -C $GITHUB_WORKSPACE/toolchain
 
       - name: Display toolchain info
         shell: bash
         run: |
           export PATH=$GITHUB_WORKSPACE/toolchain/bin:$PATH
-          
-          LIBC_PATH=$(arm-none-linux-gnueabihf-gcc --print-file-name=libc.so.6)
-          arm-none-linux-gnueabihf-readelf -s "$LIBC_PATH" | grep -m 1 '@@GLIBC_'
 
-          arm-none-linux-gnueabihf-gcc --version
-          
+          LIBC_PATH=$(arm-linux-gnueabihf-gcc --print-file-name=libc.so.6)
+          arm-linux-gnueabihf-readelf -s "$LIBC_PATH" | grep -m 1 '@@GLIBC_'
+
+          arm-linux-gnueabihf-gcc --version
+
       - name: build arm-linux-gnueabihf
         shell: bash
         run: |
@@ -107,7 +103,7 @@ jobs:
         shell: bash
         run: |
           export PATH=$GITHUB_WORKSPACE/toolchain/bin:$PATH
-          arm-none-linux-gnueabihf-strip --version
+          arm-linux-gnueabihf-strip --version
 
           SHERPA_ONNX_VERSION=v$(grep "SHERPA_ONNX_VERSION" ./CMakeLists.txt  | cut -d " " -f 2  | cut -d '"' -f 2)
 
@@ -118,7 +114,7 @@ jobs:
 
           cp -a build-arm-linux-gnueabihf/install/bin $dst/
           ls -lh $dst/bin/*
-          arm-none-linux-gnueabihf-strip $dst/bin/*
+          arm-linux-gnueabihf-strip $dst/bin/*
           ls -lh $dst
 
           lib_type=${{ matrix.lib_type }}

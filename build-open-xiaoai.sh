@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-if command -v arm-none-linux-gnueabihf-gcc  &> /dev/null; then
-  ln -svf $(which arm-none-linux-gnueabihf-gcc) ./arm-linux-gnueabihf-gcc
-  ln -svf $(which arm-none-linux-gnueabihf-g++) ./arm-linux-gnueabihf-g++
-  export PATH=$PWD:$PATH
-fi
-
 if ! command -v arm-linux-gnueabihf-gcc  &> /dev/null; then
   echo "Please install a toolchain for cross-compiling."
   echo "You can refer to: "
