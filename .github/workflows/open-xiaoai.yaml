@@ -69,10 +69,11 @@ jobs:
         run: |
           export PATH=$GITHUB_WORKSPACE/toolchain/bin:$PATH
 
-          LIBC_PATH=$(arm-linux-gnueabihf-gcc --print-file-name=libc.so.6)
-          arm-linux-gnueabihf-readelf -s "$LIBC_PATH" | grep -m 1 '@@GLIBC_'
-
           arm-linux-gnueabihf-gcc --version
+
+          gcc -x c - <<<'int main(){return 0;}' -o test && ldd ./test | grep libc.so
+
+          exit 1
 
       - name: build arm-linux-gnueabihf
         shell: bash
