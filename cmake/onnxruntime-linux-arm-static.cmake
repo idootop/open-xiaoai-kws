@@ -10,22 +10,22 @@ if(NOT (CMAKE_SYSTEM_PROCESSOR STREQUAL arm OR CMAKE_SYSTEM_PROCESSOR STREQUAL a
   message(FATAL_ERROR "This file is for arm only. Given: ${CMAKE_SYSTEM_PROCESSOR}")
 endif()
 
-if(NOT BUILD_SHARED_LIBS)
-  message(FATAL_ERROR "This file is for building shared libraries. BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
+if(BUILD_SHARED_LIBS)
+  message(FATAL_ERROR "This file is for building static libraries. BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 endif()
 
-set(onnxruntime_URL  "https://github.com/idootop/onnxruntime-build/releases/download/v1.14.0-shared/onnxruntime-linux-arm-shared-v1.14.0.zip")
-set(onnxruntime_HASH "SHA256=f1c8d0f68af8125ee91e38760a3240a78d785a29a9ebb3673bc9d173ecb417e9")
+set(onnxruntime_URL  "https://github.com/idootop/onnxruntime-build/releases/download/v1.14.0-static/onnxruntime-linux-arm-static-v1.14.0.zip")
+set(onnxruntime_HASH "SHA256=663c565abf15538fac877abab6bda8ada9cb168235f7a0ab297a2c6294396233")
 
 # If you don't have access to the Internet,
 # please download onnxruntime to one of the following locations.
 # You can add more if you want.
 set(possible_file_locations
-  $ENV{HOME}/Downloads/onnxruntime-linux-arm-1.14.0.zip
-  ${CMAKE_SOURCE_DIR}/onnxruntime-linux-arm-1.14.0.zip
-  ${CMAKE_BINARY_DIR}/onnxruntime-linux-arm-1.14.0.zip
-  /tmp/onnxruntime-linux-arm-1.14.0.zip
-  /star-fj/fangjun/download/github/onnxruntime-linux-arm-1.14.0.zip
+  $ENV{HOME}/Downloads/onnxruntime-linux-arm-static-v1.14.0.zip
+  ${CMAKE_SOURCE_DIR}/onnxruntime-linux-arm-static-v1.14.0.zip
+  ${CMAKE_BINARY_DIR}/onnxruntime-linux-arm-static-v1.14.0.zip
+  /tmp/onnxruntime-linux-arm-static-v1.14.0.zip
+  /star-fj/fangjun/download/github/onnxruntime-linux-arm-static-v1.14.0.zip
 )
 
 foreach(f IN LISTS possible_file_locations)
@@ -49,21 +49,12 @@ if(NOT onnxruntime_POPULATED)
 endif()
 message(STATUS "onnxruntime is downloaded to ${onnxruntime_SOURCE_DIR}")
 
-find_library(location_onnxruntime onnxruntime
-  PATHS
-  "${onnxruntime_SOURCE_DIR}/lib"
-  NO_CMAKE_SYSTEM_PATH
-)
+# for static libraries, we use onnxruntime_lib_files directly below
+include_directories(${onnxruntime_SOURCE_DIR}/include)
 
-message(STATUS "location_onnxruntime: ${location_onnxruntime}")
+file(GLOB onnxruntime_lib_files "${onnxruntime_SOURCE_DIR}/lib/lib*.a")
 
-add_library(onnxruntime SHARED IMPORTED)
+set(onnxruntime_lib_files ${onnxruntime_lib_files} PARENT_SCOPE)
 
-set_target_properties(onnxruntime PROPERTIES
-  IMPORTED_LOCATION ${location_onnxruntime}
-  INTERFACE_INCLUDE_DIRECTORIES "${onnxruntime_SOURCE_DIR}/include"
-)
-
-file(GLOB onnxruntime_lib_files "${onnxruntime_SOURCE_DIR}/lib/libonnxruntime*")
 message(STATUS "onnxruntime lib files: ${onnxruntime_lib_files}")
 install(FILES ${onnxruntime_lib_files} DESTINATION lib)
