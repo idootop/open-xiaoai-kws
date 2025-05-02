@@ -16,7 +16,7 @@ endif()
 
 set(onnxruntime_URL  "https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.14.0/onnxruntime-linux-arm-1.14.0.zip")
 set(onnxruntime_URL2 "https://hf-mirror.com/csukuangfj/onnxruntime-libs/resolve/main/onnxruntime-linux-arm-1.14.0.zip")
-set(onnxruntime_HASH "SHA256=61e4a4fa2d211a24e878e25bfcdee0daee5a68ac8d2d2967c0000b0fb079385c")
+set(onnxruntime_HASH "SHA256=0d6ce71f1e7168f51540c67e79467a2f89569baf3762fb3d50a11e4d59332762")
 
 # If you don't have access to the Internet,
 # please download onnxruntime to one of the following locations.
