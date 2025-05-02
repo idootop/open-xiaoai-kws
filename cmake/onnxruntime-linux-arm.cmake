@@ -15,7 +15,7 @@ if(NOT BUILD_SHARED_LIBS)
 endif()
 
 set(onnxruntime_URL  "https://github.com/idootop/sherpa-onnx/releases/download/onnxruntime-linux-arm-v1.14.0/onnxruntime-linux-arm-1.14.0.zip")
-set(onnxruntime_HASH "SHA256=01a27fb404e83d185a84498fa4bc55f87f55f06b53d6cbecd09deb5ae701bff8")
+set(onnxruntime_HASH "SHA256=293ba5ba482cd4f634668f77a4ebfc1e132ae8bc139dd96663a75eca5052057a")
 
 # If you don't have access to the Internet,
 # please download onnxruntime to one of the following locations.
