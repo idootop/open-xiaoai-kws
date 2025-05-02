@@ -26,9 +26,6 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Cache build result for ${{ env.ONNXRUNTIME_VERSION }}
         id: cache-build-result
         uses: actions/cache@v2
