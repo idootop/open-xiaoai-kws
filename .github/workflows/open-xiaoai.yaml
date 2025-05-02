@@ -2,26 +2,17 @@
 name: open-xiaoai
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - ".github/workflows/arm-linux-gnueabihf.yaml"
-      - "cmake/**"
-      - "sherpa-onnx/csrc/*"
-      - "sherpa-onnx/c-api/*"
-      - "toolchains/arm-linux-gnueabihf.toolchain.cmake"
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+*"
-  pull_request:
-    branches:
-      - master
-    paths:
-      - ".github/workflows/arm-linux-gnueabihf.yaml"
-      - "cmake/**"
-      - "sherpa-onnx/csrc/*"
-      - "sherpa-onnx/c-api/*"
-      - "toolchains/arm-linux-gnueabihf.toolchain.cmake"
+  # push:
+  #   branches:
+  #     - master
+  #   paths:
+  #     - ".github/workflows/open-xiaoai.yaml"
+  #     - "cmake/**"
+  #     - "sherpa-onnx/csrc/*"
+  #     - "sherpa-onnx/c-api/*"
+  #     - "toolchains/arm-linux-gnueabihf.toolchain.cmake"
+  #   tags:
+  #     - "v[0-9]+.[0-9]+.[0-9]+*"
 
   workflow_dispatch:
 
@@ -63,6 +54,7 @@ jobs:
           wget https://releases.linaro.org/components/toolchain/binaries/latest-7/arm-linux-gnueabihf/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz
           mkdir $GITHUB_WORKSPACE/toolchain
           tar xvf ./gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz --strip-components 1 -C $GITHUB_WORKSPACE/toolchain
+          rm -v gcc-linaro-7.5.0-2019.12-x86_64-arm-linux-gnueabihf.tar.xz
 
       - name: Display toolchain info
         shell: bash
