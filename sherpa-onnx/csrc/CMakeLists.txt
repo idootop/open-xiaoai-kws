@@ -318,7 +318,7 @@ if(NOT WIN32 AND NOT SHERPA_ONNX_ENABLE_WASM AND CMAKE_SYSTEM_NAME STREQUAL Linu
 endif()
 
 if(SHERPA_ONNX_ENABLE_BINARY)
-  # add_executable(sherpa-onnx sherpa-onnx.cc)
+  add_executable(sherpa-onnx sherpa-onnx.cc)
   add_executable(sherpa-onnx-keyword-spotter sherpa-onnx-keyword-spotter.cc)
   # add_executable(sherpa-onnx-offline sherpa-onnx-offline.cc)
   # add_executable(sherpa-onnx-offline-audio-tagging sherpa-onnx-offline-audio-tagging.cc)
@@ -338,7 +338,7 @@ if(SHERPA_ONNX_ENABLE_BINARY)
   endif()
 
   set(main_exes
-    # sherpa-onnx
+    sherpa-onnx
     sherpa-onnx-keyword-spotter
     # sherpa-onnx-offline
     # sherpa-onnx-offline-audio-tagging
@@ -405,7 +405,7 @@ if(SHERPA_ONNX_HAS_ALSA AND SHERPA_ONNX_ENABLE_BINARY)
   endif()
 
   set(exes
-    # sherpa-onnx-alsa
+    sherpa-onnx-alsa
     # sherpa-onnx-alsa-offline
     # sherpa-onnx-alsa-offline-speaker-identification
     sherpa-onnx-keyword-spotter-alsa
