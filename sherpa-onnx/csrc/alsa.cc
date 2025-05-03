@@ -146,14 +146,14 @@ const std::vector<float> &Alsa::Read(int32_t num_samples) {
   int32_t count = snd_pcm_readi(capture_handle_, samples_.data(), num_samples);
   if (count == -EPIPE) {
     static int32_t n = 0;
-    if (++n > 5) {
+    if (++n > 10000) {
       fprintf(
           stderr,
           "Too many overruns. It is very likely that the RTF on your board is "
           "larger than 1. Please use ./bin/sherpa-onnx to compute the RTF.\n");
       exit(-1);
     }
-    fprintf(stderr, "XRUN.\n");
+    fprintf(stderr, ">>> overrun %d\n", n);
     snd_pcm_prepare(capture_handle_);
 
     static std::vector<float> tmp;
