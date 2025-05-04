@@ -159,15 +159,6 @@ and if you want to select card 3 and device 0 on that card, please use:
 Alsa::~Alsa() { snd_pcm_close(capture_handle_); }
 
 const std::vector<float> &Alsa::Read(int32_t num_samples) {
-  fprintf(stderr, ">>> 🔥 读取数据开始，请求样本数: %d\n", num_samples);
-
-  // 检查可用帧数，避免请求过多数据
-  snd_pcm_sframes_t avail = snd_pcm_avail(capture_handle_);
-  if (avail < num_samples) {
-    fprintf(stderr, ">>> 🚗 可用帧数: %d\n", avail);
-    num_samples = std::max(1, std::min(num_samples, static_cast<int32_t>(avail)));
-  }
-
   samples_.resize(num_samples * actual_channel_count_);
 
   int32_t count = snd_pcm_readi(capture_handle_, samples_.data(), num_samples);
@@ -186,7 +177,6 @@ const std::vector<float> &Alsa::Read(int32_t num_samples) {
       exit(-1);
     }
 
-    // 清空缓冲区重新准备录制
     snd_pcm_drop(capture_handle_);
     snd_pcm_prepare(capture_handle_);
     
@@ -200,8 +190,6 @@ const std::vector<float> &Alsa::Read(int32_t num_samples) {
   samples_.resize(count * actual_channel_count_);
 
   ToFloat(samples_, actual_channel_count_, &samples1_);
-
-  fprintf(stderr, ">>> ✅ 读取数据成功, 样本数: %d\n", samples_.size());
 
   if (!resampler_) {
     return samples1_;
