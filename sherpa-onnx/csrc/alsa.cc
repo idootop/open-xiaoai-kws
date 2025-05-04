@@ -7,6 +7,7 @@
 #include "sherpa-onnx/csrc/alsa.h"
 
 #include <algorithm>
+#include <time.h>  // 用于nanosleep
 
 #include "alsa/asoundlib.h"
 
@@ -122,6 +123,24 @@ and if you want to select card 3 and device 0 on that card, please use:
     fprintf(stderr, "Current sample rate: %d\n", actual_sample_rate_);
   }
 
+  // 设置 period size 和 buffer size 以减少 overrun
+  snd_pcm_uframes_t period_size = period_size_;
+  snd_pcm_uframes_t buffer_size = buffer_size_;
+  
+  err = snd_pcm_hw_params_set_period_size_near(capture_handle_, hw_params, &period_size, &dir);
+  if (err) {
+    fprintf(stderr, "Failed to set period size: %s\n", snd_strerror(err));
+  } else {
+    fprintf(stderr, "Period size set to %lu frames\n", period_size);
+  }
+  
+  err = snd_pcm_hw_params_set_buffer_size_near(capture_handle_, hw_params, &buffer_size);
+  if (err) {
+    fprintf(stderr, "Failed to set buffer size: %s\n", snd_strerror(err));
+  } else {
+    fprintf(stderr, "Buffer size set to %lu frames (factor: %d)\n", buffer_size, buffer_factor_);
+  }
+
   err = snd_pcm_hw_params(capture_handle_, hw_params);
   if (err) {
     fprintf(stderr, "Failed to set hw params: %s\n", snd_strerror(err));
@@ -153,8 +172,19 @@ const std::vector<float> &Alsa::Read(int32_t num_samples) {
           "larger than 1. Please use ./bin/sherpa-onnx to compute the RTF.\n");
       exit(-1);
     }
-    fprintf(stderr, ">>> overrun %d\n", n);
-    snd_pcm_prepare(capture_handle_);
+    fprintf(stderr, ">>> overrun %d, attempting recovery\n", n);
+    
+    // 尝试恢复
+    int err = snd_pcm_recover(capture_handle_, -EPIPE, 1);
+    if (err < 0) {
+      fprintf(stderr, "Recovery failed: %s\n", snd_strerror(err));
+      // 如果恢复失败，尝试重新准备
+      snd_pcm_prepare(capture_handle_);
+    }
+    
+    // 添加短暂延时，让缓冲区有时间填充
+    struct timespec ts = {0, 10000000};  // 10毫秒
+    nanosleep(&ts, nullptr);
 
     static std::vector<float> tmp;
     return tmp;
