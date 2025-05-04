@@ -15,7 +15,12 @@ namespace sherpa_onnx {
 
 class Alsa {
  public:
-  explicit Alsa(const char *device_name);
+  explicit Alsa(
+    const char *device_name, 
+    int32_t period_size = 170, 
+    int32_t buffer_size = 1365
+  );
+  
   ~Alsa();
 
   // This is a blocking read.
@@ -34,8 +39,8 @@ class Alsa {
   int32_t actual_sample_rate_;
 
   int32_t actual_channel_count_ = 1;
-  int32_t period_size_ = 170;  // 170
-  int32_t buffer_size_ = 1365;  // 1365
+  int32_t period_size_;  // 默认170
+  int32_t buffer_size_;  // 默认1365
 
   std::unique_ptr<LinearResample> resampler_;
   std::vector<int16_t> samples_;  // directly from the microphone

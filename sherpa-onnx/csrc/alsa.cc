@@ -23,7 +23,8 @@ void ToFloat(const std::vector<int16_t> &in, int32_t num_channels,
   }
 }
 
-Alsa::Alsa(const char *device_name) {
+Alsa::Alsa(const char *device_name, int32_t period_size, int32_t buffer_size) 
+    : period_size_(period_size), buffer_size_(buffer_size) {
   const char *kDeviceHelp = R"(
 Please use the command:
 
@@ -158,40 +159,36 @@ and if you want to select card 3 and device 0 on that card, please use:
 Alsa::~Alsa() { snd_pcm_close(capture_handle_); }
 
 const std::vector<float> &Alsa::Read(int32_t num_samples) {
+  fprintf(stderr, ">>> 🔥 读取数据开始，请求样本数: %d\n", num_samples);
+
   // 检查可用帧数，避免请求过多数据
-  // snd_pcm_sframes_t avail = snd_pcm_avail(capture_handle_);
-  // if (avail < num_samples) {
-  //   num_samples = std::min(num_samples, static_cast<int32_t>(avail));
-  //   if (num_samples <= 0) {
-  //     static std::vector<float> tmp;
-  //     struct timespec ts = {0, 1000000};  // 1毫秒短暂等待
-  //     nanosleep(&ts, nullptr);
-  //     return tmp;
-  //   }
-  // }
+  snd_pcm_sframes_t avail = snd_pcm_avail(capture_handle_);
+  if (avail < num_samples) {
+    fprintf(stderr, ">>> 🚗 可用帧数: %d\n", avail);
+    num_samples = std::max(1, std::min(num_samples, static_cast<int32_t>(avail)));
+  }
 
   samples_.resize(num_samples * actual_channel_count_);
 
-  // count is in frames. Each frame contains actual_channel_count_ samples
   int32_t count = snd_pcm_readi(capture_handle_, samples_.data(), num_samples);
   if (count == -EPIPE) {
-    static int32_t n = 0;
-    if (++n > 10) {
+    static int32_t total_overruns = 0;
+    total_overruns++;
+
+    fprintf(stderr, ">>> ❌ overrun %d\n", total_overruns);
+    
+    if (total_overruns > 100) {
       fprintf(
           stderr,
-          "Too many overruns. It is very likely that the RTF on your board is "
-          "larger than 1. Please use ./bin/sherpa-onnx to compute the RTF.\n");
+          "❌ Too many overruns: %d. \n", 
+          total_overruns);
+      
       exit(-1);
     }
 
     // 清空缓冲区重新准备录制
-    fprintf(stderr, ">>> overrun %d, attempting recovery\n", n);
     snd_pcm_drop(capture_handle_);
-    int err = snd_pcm_prepare(capture_handle_);
-    if (err < 0) {
-      fprintf(stderr, "Recovery failed: %s\n", snd_strerror(err));
-      exit(-1);
-    }
+    snd_pcm_prepare(capture_handle_);
     
     static std::vector<float> tmp;
     return tmp;
@@ -203,6 +200,8 @@ const std::vector<float> &Alsa::Read(int32_t num_samples) {
   samples_.resize(count * actual_channel_count_);
 
   ToFloat(samples_, actual_channel_count_, &samples1_);
+
+  fprintf(stderr, ">>> ✅ 读取数据成功, 样本数: %d\n", samples_.size());
 
   if (!resampler_) {
     return samples1_;
