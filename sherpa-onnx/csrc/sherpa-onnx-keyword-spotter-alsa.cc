@@ -120,7 +120,7 @@ as the device_name.
     temp_samples.insert(temp_samples.end(), samples.begin(), samples.end());
 
     if (temp_samples.size() < chunk_size) {
-      nanosleep(1 * 1000000, 0); // 等待 1ms
+      nanosleep(1000000, 0); // 等待 1ms
       continue;
     }
 
