@@ -34,8 +34,8 @@ class Alsa {
   int32_t actual_sample_rate_;
 
   int32_t actual_channel_count_ = 1;
-  int32_t period_size_ = 360;  // 周期大小
-  int32_t buffer_size_ = 1440;  // period_size_ * 4
+  int32_t period_size_ = 340;  // 周期大小
+  int32_t buffer_size_ = 2720;  // period_size_ * 4
 
   std::unique_ptr<LinearResample> resampler_;
   std::vector<int16_t> samples_;  // directly from the microphone
