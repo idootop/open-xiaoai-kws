@@ -132,9 +132,10 @@ jobs:
       - name: ZIP alsa-lib
         shell: bash
         run: |
+          cd build-arm-linux-gnueabihf
           tar cjvf alsa-lib.tar.bz2 alsa-lib
 
       - uses: actions/upload-artifact@v4
         with:
           name: alsa-lib
-          path: alsa-lib.tar.bz2
+          path: build-arm-linux-gnueabihf/alsa-lib.tar.bz2
