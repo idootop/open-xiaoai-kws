@@ -124,21 +124,21 @@ and if you want to select card 3 and device 0 on that card, please use:
     fprintf(stderr, "Current sample rate: %d\n", actual_sample_rate_);
   }
 
-  snd_pcm_uframes_t period_size = period_size_;
-  snd_pcm_uframes_t buffer_size = buffer_size_;
+  snd_pcm_uframes_t period_frames = period_size_;
+  snd_pcm_uframes_t buffer_frames = buffer_size_;
   
-  err = snd_pcm_hw_params_set_period_size_near(capture_handle_, hw_params, &period_size, &dir);
+  err = snd_pcm_hw_params_set_period_size_near(capture_handle_, hw_params, &period_frames, &dir);
   if (err) {
     fprintf(stderr, "Failed to set period size: %s\n", snd_strerror(err));
   } else {
-    fprintf(stderr, "Period size set to %lu frames\n", period_size);
+    fprintf(stderr, "Period size set to %lu frames\n", period_frames);
   }
   
-  err = snd_pcm_hw_params_set_buffer_size_near(capture_handle_, hw_params, &buffer_size);
+  err = snd_pcm_hw_params_set_buffer_size_near(capture_handle_, hw_params, &buffer_frames);
   if (err) {
     fprintf(stderr, "Failed to set buffer size: %s\n", snd_strerror(err));
   } else {
-    fprintf(stderr, "Buffer size set to %lu frames\n", buffer_size);
+    fprintf(stderr, "Buffer size set to %lu frames\n", buffer_frames);
   }
 
   err = snd_pcm_hw_params(capture_handle_, hw_params);
