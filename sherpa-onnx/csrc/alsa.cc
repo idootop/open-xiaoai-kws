@@ -159,16 +159,16 @@ Alsa::~Alsa() { snd_pcm_close(capture_handle_); }
 
 const std::vector<float> &Alsa::Read(int32_t num_samples) {
   // 检查可用帧数，避免请求过多数据
-  snd_pcm_sframes_t avail = snd_pcm_avail(capture_handle_);
-  if (avail < num_samples) {
-    num_samples = std::min(num_samples, static_cast<int32_t>(avail));
-    if (num_samples <= 0) {
-      static std::vector<float> tmp;
-      struct timespec ts = {0, 1000000};  // 1毫秒短暂等待
-      nanosleep(&ts, nullptr);
-      return tmp;
-    }
-  }
+  // snd_pcm_sframes_t avail = snd_pcm_avail(capture_handle_);
+  // if (avail < num_samples) {
+  //   num_samples = std::min(num_samples, static_cast<int32_t>(avail));
+  //   if (num_samples <= 0) {
+  //     static std::vector<float> tmp;
+  //     struct timespec ts = {0, 1000000};  // 1毫秒短暂等待
+  //     nanosleep(&ts, nullptr);
+  //     return tmp;
+  //   }
+  // }
 
   samples_.resize(num_samples * actual_channel_count_);
 
