@@ -138,7 +138,7 @@ and if you want to select card 3 and device 0 on that card, please use:
   if (err) {
     fprintf(stderr, "Failed to set buffer size: %s\n", snd_strerror(err));
   } else {
-    fprintf(stderr, "Buffer size set to %lu frames (factor: %d)\n", buffer_size, buffer_factor_);
+    fprintf(stderr, "Buffer size set to %lu frames\n", buffer_size);
   }
 
   err = snd_pcm_hw_params(capture_handle_, hw_params);
