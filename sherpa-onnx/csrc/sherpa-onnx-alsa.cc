@@ -92,8 +92,6 @@ as the device_name.
 
   fprintf(stderr, "Started! Please speak\n");
 
-  int32_t chunk = 0.1 * alsa.GetActualSampleRate();
-
   std::string last_text;
 
   auto stream = recognizer.CreateStream();
@@ -101,6 +99,9 @@ as the device_name.
   sherpa_onnx::Display display;
 
   int32_t segment_index = 0;
+
+  int32_t chunk = 170;
+  
   while (!stop) {
     const std::vector<float> &samples = alsa.Read(chunk);
 
@@ -119,8 +120,7 @@ as the device_name.
       // For streaming paraformer models, since it has a large right chunk size
       // we need to pad it on endpointing so that the last character
       // can be recognized
-      std::vector<float> tail_paddings(
-          static_cast<int>(1.0 * expected_sample_rate));
+      std::vector<float> tail_paddings(static_cast<int>(chunk));
       stream->AcceptWaveform(expected_sample_rate, tail_paddings.data(),
                              tail_paddings.size());
       while (recognizer.IsReady(stream.get())) {
