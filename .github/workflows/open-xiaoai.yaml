@@ -28,7 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        lib_type: [static, shared]
+        lib_type: [static]
 
     steps:
       - uses: actions/checkout@v4
