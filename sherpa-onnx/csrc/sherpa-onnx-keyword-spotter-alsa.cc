@@ -89,8 +89,6 @@ as the device_name.
     exit(-1);
   }
 
-  int32_t chunk = 0.1 * alsa.GetActualSampleRate();
-
   std::string last_text;
 
   auto stream = spotter.CreateStream();
@@ -98,6 +96,9 @@ as the device_name.
   sherpa_onnx::Display display;
 
   int32_t keyword_index = 0;
+
+  int32_t chunk = 170;
+
   while (!stop) {
     const std::vector<float> &samples = alsa.Read(chunk);
 

@@ -123,21 +123,8 @@ and if you want to select card 3 and device 0 on that card, please use:
     fprintf(stderr, "Current sample rate: %d\n", actual_sample_rate_);
   }
 
-  // 设置 period size 和 buffer size 以减少 overrun
   snd_pcm_uframes_t period_size = period_size_;
   snd_pcm_uframes_t buffer_size = buffer_size_;
-
-  // 打印设备支持的period_size和buffer_size的最大最小值
-  snd_pcm_uframes_t period_size_min, period_size_max;
-  snd_pcm_uframes_t buffer_size_min, buffer_size_max;
-  snd_pcm_hw_params_get_period_size_min(hw_params, &period_size_min, &dir);
-  fprintf(stderr, "period_size_min: %lu\n", period_size_min);
-  snd_pcm_hw_params_get_period_size_max(hw_params, &period_size_max, &dir);
-  fprintf(stderr, "period_size_max: %lu\n", period_size_max);
-  snd_pcm_hw_params_get_buffer_size_min(hw_params, &buffer_size_min);
-  fprintf(stderr, "buffer_size_min: %lu\n", buffer_size_min);
-  snd_pcm_hw_params_get_buffer_size_max(hw_params, &buffer_size_max);
-  fprintf(stderr, "buffer_size_max: %lu\n", buffer_size_max);
   
   err = snd_pcm_hw_params_set_period_size_near(capture_handle_, hw_params, &period_size, &dir);
   if (err) {
@@ -171,33 +158,41 @@ and if you want to select card 3 and device 0 on that card, please use:
 Alsa::~Alsa() { snd_pcm_close(capture_handle_); }
 
 const std::vector<float> &Alsa::Read(int32_t num_samples) {
+  // 检查可用帧数，避免请求过多数据
+  snd_pcm_sframes_t avail = snd_pcm_avail(capture_handle_);
+  if (avail < num_samples) {
+    num_samples = std::min(num_samples, static_cast<int32_t>(avail));
+    if (num_samples <= 0) {
+      static std::vector<float> tmp;
+      struct timespec ts = {0, 1000000};  // 1毫秒短暂等待
+      nanosleep(&ts, nullptr);
+      return tmp;
+    }
+  }
+
   samples_.resize(num_samples * actual_channel_count_);
 
   // count is in frames. Each frame contains actual_channel_count_ samples
   int32_t count = snd_pcm_readi(capture_handle_, samples_.data(), num_samples);
   if (count == -EPIPE) {
     static int32_t n = 0;
-    if (++n > 10000) {
+    if (++n > 10) {
       fprintf(
           stderr,
           "Too many overruns. It is very likely that the RTF on your board is "
           "larger than 1. Please use ./bin/sherpa-onnx to compute the RTF.\n");
       exit(-1);
     }
+
+    // 清空缓冲区重新准备录制
     fprintf(stderr, ">>> overrun %d, attempting recovery\n", n);
-    
-    // 尝试恢复
-    int err = snd_pcm_recover(capture_handle_, -EPIPE, 1);
+    snd_pcm_drop(capture_handle_);
+    int err = snd_pcm_prepare(capture_handle_);
     if (err < 0) {
       fprintf(stderr, "Recovery failed: %s\n", snd_strerror(err));
-      // 如果恢复失败，尝试重新准备
-      snd_pcm_prepare(capture_handle_);
+      exit(-1);
     }
     
-    // 添加短暂延时，让缓冲区有时间填充
-    struct timespec ts = {0, 10000000};  // 10毫秒
-    nanosleep(&ts, nullptr);
-
     static std::vector<float> tmp;
     return tmp;
   } else if (count < 0) {
