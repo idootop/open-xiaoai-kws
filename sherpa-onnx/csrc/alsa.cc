@@ -130,13 +130,13 @@ and if you want to select card 3 and device 0 on that card, please use:
   // 打印设备支持的period_size和buffer_size的最大最小值
   snd_pcm_uframes_t period_size_min, period_size_max;
   snd_pcm_uframes_t buffer_size_min, buffer_size_max;
-  snd_pcm_hw_params_get_period_size_min(hw_params, &period_size_min, &dir);
+  snd_pcm_hw_params_get_period_size_min(hw_params, &period_size_min);
   fprintf(stderr, "period_size_min: %lu\n", period_size_min);
-  snd_pcm_hw_params_get_period_size_max(hw_params, &period_size_max, &dir);
+  snd_pcm_hw_params_get_period_size_max(hw_params, &period_size_max);
   fprintf(stderr, "period_size_max: %lu\n", period_size_max);
-  snd_pcm_hw_params_get_buffer_size_min(hw_params, &buffer_size_min, &dir);
+  snd_pcm_hw_params_get_buffer_size_min(hw_params, &buffer_size_min);
   fprintf(stderr, "buffer_size_min: %lu\n", buffer_size_min);
-  snd_pcm_hw_params_get_buffer_size_max(hw_params, &buffer_size_max, &dir);
+  snd_pcm_hw_params_get_buffer_size_max(hw_params, &buffer_size_max);
   fprintf(stderr, "buffer_size_max: %lu\n", buffer_size_max);
   
   err = snd_pcm_hw_params_set_period_size_near(capture_handle_, hw_params, &period_size, &dir);
