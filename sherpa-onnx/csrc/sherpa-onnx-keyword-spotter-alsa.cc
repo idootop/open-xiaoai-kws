@@ -112,7 +112,7 @@ as the device_name.
 
   int32_t keyword_index = 0;
   
-  const std::vector<float> temp_samples;
+  std::vector<float> temp_samples;
 
   while (!stop) {
     const std::vector<float> &samples = alsa.Read(1024);
@@ -120,7 +120,8 @@ as the device_name.
     temp_samples.insert(temp_samples.end(), samples.begin(), samples.end());
 
     if (temp_samples.size() < chunk_size) {
-      nanosleep(1000000, 0); // 等待 1ms
+      struct timespec ts = {0, 1 * 1000000};  // 1毫秒
+      nanosleep(&ts, nullptr);
       continue;
     }
 
