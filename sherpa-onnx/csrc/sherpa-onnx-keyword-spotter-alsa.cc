@@ -82,7 +82,7 @@ as the device_name.
   // 限制参数在有效范围内
   buffer_size = std::max(buffer_size, 1365);
   period_size = std::max(period_size, 170);
-  chunk_size = std::max(chunk_size, 1024);
+  chunk_size = std::max(chunk_size, 170);
   
   fprintf(stderr, "Using buffer size: %d\n", buffer_size);
   fprintf(stderr, "Using period size: %d\n", period_size);
@@ -163,7 +163,7 @@ as the device_name.
 
   // 主线程负责采集音频
   while (!stop) {
-    const std::vector<float> &samples = alsa.Read(1024);
+    const std::vector<float> &samples = alsa.Read(chunk_size);
     
     writing_buffer->insert(writing_buffer->end(), samples.begin(), samples.end());
     
