@@ -166,7 +166,7 @@ const std::vector<float> &Alsa::Read(int32_t num_samples) {
     static int32_t total_overruns = 0;
     total_overruns++;
 
-    fprintf(stderr, ">>> ❌ overrun %d\n", total_overruns);
+    fprintf(stderr, "❌ overrun %d\n", total_overruns);
     
     if (total_overruns > 100) {
       fprintf(

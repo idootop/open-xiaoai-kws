@@ -7,13 +7,17 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <mutex>
+#include <thread>
+#include <atomic>
+#include <condition_variable>
 
 #include "sherpa-onnx/csrc/alsa.h"
 #include "sherpa-onnx/csrc/display.h"
 #include "sherpa-onnx/csrc/keyword-spotter.h"
 #include "sherpa-onnx/csrc/parse-options.h"
 
-bool stop = false;
+std::atomic<bool> stop(false);
 
 static void Handler(int sig) {
   stop = true;
@@ -112,35 +116,79 @@ as the device_name.
 
   int32_t keyword_index = 0;
   
-  std::vector<float> temp_samples;
-
-  while (!stop) {
-    const std::vector<float> &samples = alsa.Read(1024);
-
-    temp_samples.insert(temp_samples.end(), samples.begin(), samples.end());
-
-    if (temp_samples.size() < chunk_size) {
-      struct timespec ts = {0, 1 * 1000000};  // 1毫秒
-      nanosleep(&ts, nullptr);
-      continue;
-    }
-
-    stream->AcceptWaveform(expected_sample_rate, temp_samples.data(), temp_samples.size());
-    temp_samples.clear();
-
-    while (spotter.IsReady(stream.get())) {
-      spotter.DecodeStream(stream.get());
-
-      const auto r = spotter.GetResult(stream.get());
-      if (!r.keyword.empty()) {
-        display.Print(keyword_index, r.AsJsonString());
-        fflush(stderr);
-        keyword_index++;
-
-        spotter.Reset(stream.get());
+  // 双缓冲实现
+  std::vector<float> buffer1, buffer2;
+  std::vector<float> *writing_buffer = &buffer1;
+  std::vector<float> *processing_buffer = &buffer2;
+  std::mutex buffer_mutex;
+  std::condition_variable buffer_cv;
+  bool buffer_ready = false;
+  
+  // 处理线程
+  std::thread processing_thread([&]() {
+    while (!stop) {
+      std::vector<float> local_buffer;
+      
+      {
+        std::unique_lock<std::mutex> lock(buffer_mutex);
+        buffer_cv.wait(lock, [&]{ return buffer_ready || stop; });
+        
+        if (stop) break;
+        
+        // 交换指针，避免复制
+        local_buffer.swap(*processing_buffer);
+        buffer_ready = false;
+      }
+      
+      if (!local_buffer.empty()) {
+        fprintf(stderr, "🔥 Processing buffer size: %d\n", local_buffer.size());
+        
+        stream->AcceptWaveform(expected_sample_rate, local_buffer.data(), local_buffer.size());
+        
+        while (spotter.IsReady(stream.get())) {
+          spotter.DecodeStream(stream.get());
+          
+          const auto r = spotter.GetResult(stream.get());
+          if (!r.keyword.empty()) {
+            display.Print(keyword_index, r.AsJsonString());
+            fflush(stderr);
+            keyword_index++;
+            
+            spotter.Reset(stream.get());
+          }
+        }
       }
     }
+  });
+
+  // 主线程负责采集音频
+  while (!stop) {
+    const std::vector<float> &samples = alsa.Read(1024);
+    
+    writing_buffer->insert(writing_buffer->end(), samples.begin(), samples.end());
+    
+    if (writing_buffer->size() >= chunk_size) {
+      std::unique_lock<std::mutex> lock(buffer_mutex);
+      if (!buffer_ready) {
+        // 交换缓冲区
+        std::swap(writing_buffer, processing_buffer);
+        buffer_ready = true;
+        lock.unlock();
+        buffer_cv.notify_one();
+      }
+    } else {
+      struct timespec ts = {0, 1 * 1000000};  // 1毫秒
+      nanosleep(&ts, nullptr);
+    }
   }
+  
+  // 等待处理线程结束
+  {
+    std::lock_guard<std::mutex> lock(buffer_mutex);
+    buffer_ready = true;
+  }
+  buffer_cv.notify_one();
+  processing_thread.join();
 
   return 0;
 }
