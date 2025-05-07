@@ -170,7 +170,7 @@ as the device_name.
       if (!local_buffer.empty()) {
         
         if(!started){
-          started = true
+          started = true;
           LogKeyword("__STARTED__");
         }
 
