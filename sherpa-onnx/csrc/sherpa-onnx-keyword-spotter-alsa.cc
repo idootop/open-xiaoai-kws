@@ -4,13 +4,14 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <algorithm>
 #include <cstdint>
 #include <mutex>
 #include <thread>
 #include <atomic>
 #include <condition_variable>
+#include <filesystem> 
+#include <fstream>
 
 #include "sherpa-onnx/csrc/alsa.h"
 #include "sherpa-onnx/csrc/display.h"
@@ -25,13 +26,12 @@ static void Handler(int sig) {
 }
 
 void LogKeyword(const std::string &keyword) {
-  const char *dir_path = "/tmp/open-xiaoai";
-  const char *file_path = "/tmp/open-xiaoai/kws.log";
+  const std::string dir_path = "/tmp/open-xiaoai";
+  const std::string file_path = "/tmp/open-xiaoai/kws.log";
   
   // 检查目录是否存在，不存在则创建
-  struct stat st = {0};
-  if (stat(dir_path, &st) == -1) {
-    mkdir(dir_path, 0755);
+  if (!std::filesystem::exists(dir_path)) {
+    std::filesystem::create_directory(dir_path);
   }
   
   // 获取当前时间戳（毫秒）
@@ -43,10 +43,10 @@ void LogKeyword(const std::string &keyword) {
   std::string log_content = std::to_string(millis) + "@" + keyword;
   
   // 写入文件（覆盖模式）
-  FILE *fp = fopen(file_path, "w");
-  if (fp != nullptr) {
-    fputs(log_content.c_str(), fp);
-    fclose(fp);
+  std::ofstream file(file_path, std::ios::out | std::ios::trunc);
+  if (file.is_open()) {
+    file << log_content;
+    file.close();
   }
 }
 
