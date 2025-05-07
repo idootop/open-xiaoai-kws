@@ -24,6 +24,32 @@ static void Handler(int sig) {
   fprintf(stderr, "\nCaught Ctrl + C. Exiting...\n");
 }
 
+void LogKeyword(const std::string &keyword) {
+  const char *dir_path = "/tmp/open-xiaoai";
+  const char *file_path = "/tmp/open-xiaoai/kws.log";
+  
+  // 检查目录是否存在，不存在则创建
+  struct stat st = {0};
+  if (stat(dir_path, &st) == -1) {
+    mkdir(dir_path, 0755);
+  }
+  
+  // 获取当前时间戳（毫秒）
+  auto now = std::chrono::system_clock::now();
+  auto duration = now.time_since_epoch();
+  auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+  
+  // 创建日志内容
+  std::string log_content = std::to_string(millis) + "@" + keyword;
+  
+  // 写入文件（覆盖模式）
+  FILE *fp = fopen(file_path, "w");
+  if (fp != nullptr) {
+    fputs(log_content.c_str(), fp);
+    fclose(fp);
+  }
+}
+
 int main(int32_t argc, char *argv[]) {
   signal(SIGINT, Handler);
 
@@ -123,6 +149,7 @@ as the device_name.
   std::mutex buffer_mutex;
   std::condition_variable buffer_cv;
   bool buffer_ready = false;
+  bool started = false;
   
   // 处理线程
   std::thread processing_thread([&]() {
@@ -141,6 +168,12 @@ as the device_name.
       }
       
       if (!local_buffer.empty()) {
+        
+        if(!started){
+          started = true
+          LogKeyword("__STARTED__");
+        }
+
         fprintf(stderr, "🔥 Processing buffer size: %d\n", local_buffer.size());
         
         stream->AcceptWaveform(expected_sample_rate, local_buffer.data(), local_buffer.size());
@@ -150,7 +183,10 @@ as the device_name.
           
           const auto r = spotter.GetResult(stream.get());
           if (!r.keyword.empty()) {
-            display.Print(keyword_index, r.AsJsonString());
+            display.Print(keyword_index, r.AsJsonString()+"\n");
+
+            LogKeyword(r.keyword);
+
             fflush(stderr);
             keyword_index++;
             
