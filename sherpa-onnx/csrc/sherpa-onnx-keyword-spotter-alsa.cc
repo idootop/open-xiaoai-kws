@@ -45,11 +45,51 @@ void LogKeyword(const std::string &keyword) {
   // 创建日志内容
   std::string log_content = std::to_string(millis) + "@" + keyword;
   
-  // 写入文件（覆盖模式）
-  std::ofstream file(file_path, std::ios::out | std::ios::trunc);
-  if (file.is_open()) {
-    file << log_content;
-    file.close();
+  // 读取文件行数
+  int line_count = 0;
+  std::ifstream read_file(file_path); 
+  if (read_file.is_open()) {
+    std::string line;
+    while (std::getline(read_file, line)) {
+      line_count++;
+    }
+    read_file.close();
+  }
+  
+  // 如果少于 10 行则追加，否则清空重写
+  std::ios_base::openmode mode = std::ios::out;
+  if (line_count >= 10) {
+    // 清空文件重新开始
+    mode |= std::ios::trunc;
+  } else {
+    // 追加模式
+    mode |= std::ios::app;
+  }
+  
+  // 写入文件（写入时锁定文件）
+  std::ofstream file;
+  int fd = open(file_path.c_str(), O_WRONLY | O_CREAT, 0644);
+  if (fd != -1) {
+    // 获取文件锁
+    struct flock fl;
+    fl.l_type = F_WRLCK;
+    fl.l_whence = SEEK_SET;
+    fl.l_start = 0;
+    fl.l_len = 0;
+    
+    if (fcntl(fd, F_SETLK, &fl) != -1) {
+      file.open(file_path, mode);
+      if (file.is_open()) {
+        file << log_content << std::endl;
+        file.flush(); 
+        file.close();
+      }
+      
+      // 释放文件锁
+      fl.l_type = F_UNLCK;
+      fcntl(fd, F_SETLK, &fl);
+    }
+    close(fd);
   }
 }
 
