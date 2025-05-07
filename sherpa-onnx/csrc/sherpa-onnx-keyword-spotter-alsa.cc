@@ -4,13 +4,15 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #include <algorithm>
 #include <cstdint>
 #include <mutex>
 #include <thread>
 #include <atomic>
 #include <condition_variable>
-#include <filesystem> 
 #include <fstream>
 
 #include "sherpa-onnx/csrc/alsa.h"
@@ -30,8 +32,9 @@ void LogKeyword(const std::string &keyword) {
   const std::string file_path = "/tmp/open-xiaoai/kws.log";
   
   // 检查目录是否存在，不存在则创建
-  if (!std::filesystem::exists(dir_path)) {
-    std::filesystem::create_directory(dir_path);
+  struct stat st;
+  if (::stat(dir_path.c_str(), &st) == -1) {
+    ::mkdir(dir_path.c_str(), 0755);
   }
   
   // 获取当前时间戳（毫秒）
