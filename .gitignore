@@ -35,7 +35,6 @@ run-en-zipformer-microphone*
 run-websocket-server*
 decode-file
 *.dylib
-tokens.txt
 *.onnx
 log.txt
 tags
