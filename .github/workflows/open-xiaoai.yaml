@@ -119,14 +119,14 @@ jobs:
           name: ${{ env.DIST_NAME }}
           path: ${{ env.DIST_NAME }}.zip
 
-      # - name: Upload v${{ env.RELEASE_VERSION }}
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     allowUpdates: true
-      #     draft: false
-      #     removeArtifacts: true
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     name: v${{ env.RELEASE_VERSION }}
-      #     tag: v${{ env.RELEASE_VERSION }}
-      #     body: ${{ env.DIST_NAME }}
-      #     artifacts: ${{ env.DIST_NAME }}.zip
+      - name: Upload v${{ env.RELEASE_VERSION }}
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          draft: false
+          removeArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: v${{ env.RELEASE_VERSION }}
+          tag: v${{ env.RELEASE_VERSION }}
+          body: ${{ env.DIST_NAME }}
+          artifacts: ${{ env.DIST_NAME }}.zip

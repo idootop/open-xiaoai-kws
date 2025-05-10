@@ -5,6 +5,11 @@
 
 小爱音箱自定义唤醒词，基于 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)。
 
+## 演示视频
+
+👉 [小爱音箱自定义唤醒词演示视频](https://www.bilibili.com/video/BV1YfVUz5EMj)
+
+[![](https://github.com/idootop/open-xiaoai/raw/main/docs/images/kws.jpg)](https://www.bilibili.com/video/BV1YfVUz5EMj)
 
 ## 快速开始
 
@@ -107,15 +112,23 @@ EOF
 
 ## 常见问题
 
-### Q：能否自定义唤醒词的响应动作？比如：关灯
-
-该脚本默认不支持自定义唤醒词触发后执行的动作。
-
-如果你想要自定义唤醒词的触发动作，可以参考 [open-xiaoai](https://github.com/idootop/open-xiaoai) 里的其他演示程序，根据 server 端接收到的小爱音箱上的唤醒词事件，实时触发任意自定义操作（比如：打电话，订外卖等）。
-
 ### Q：为什么唤醒词识别不是很灵敏，时好时坏？
 
 由于小爱音箱 client 端算力和存储空间有限，默认只使用了一个较小的语音识别模型，所以识别效果并不是很完美，需要多多尝试。
+
+你可以在小爱音箱上运行以下调试脚本，根据语音识别结果，动态调整唤醒词拼音。
+
+```shell
+# 运行调试脚本
+curl -sSfL https://gitee.com/idootop/artifacts/releases/download/open-xiaoai-kws/debug.sh | sh
+
+# 🐢 模型加载较慢，请在提示 Started! Please speak 后，再使用自定义唤醒词
+# Started! Please speak
+# 0:tiānmāojīnglián 👈 天猫精灵
+# 1:xiǎodùxiǎodù 👈 小度小度
+# 2:dōubāodùba 👈 豆包豆包
+# 3:nǐhǎoxiǎozhī 👈 你好小智
+```
 
 如果你想要更完美的唤醒词识别效果，可以在 server 端运行更大规模、更先进的 AI 模型，来进行唤醒词识别。推荐使用 [FunASR](https://github.com/modelscope/FunASR) 和 [Sherpa-ONNX](https://github.com/k2-fsa/sherpa-onnx)，可以参考 [xiaozhi-esp32-server](https://github.com/xinnan-tech/xiaozhi-esp32-server) 项目。
 
@@ -130,3 +143,9 @@ EOF
 由于小爱音箱 client 端算力和存储空间有限，默认只使用了一个较小的语音识别模型，并不支持说话人识别等高阶功能。
 
 如果你需要声纹识别、连续对话等高阶功能，可以在 server 端运行更大规模、更先进的 AI 模型，来进行语音识别和对话管理。推荐使用 [FunASR](https://github.com/modelscope/FunASR) 和 [Sherpa-ONNX](https://github.com/k2-fsa/sherpa-onnx)，可以参考 [xiaozhi-esp32-server](https://github.com/xinnan-tech/xiaozhi-esp32-server) 项目。
+
+### Q：能否自定义唤醒词的响应动作？比如：关灯
+
+该脚本默认不支持自定义唤醒词触发后执行的动作。
+
+如果你想要自定义唤醒词的触发动作，可以参考 [open-xiaoai](https://github.com/idootop/open-xiaoai) 里的其他演示程序，根据 server 端接收到的小爱音箱上的唤醒词事件，实时触发任意自定义操作（比如：打电话，订外卖等）。
