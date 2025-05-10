@@ -2,18 +2,6 @@
 name: open-xiaoai
 
 on:
-  # push:
-  #   branches:
-  #     - master
-  #   paths:
-  #     - ".github/workflows/open-xiaoai.yaml"
-  #     - "cmake/**"
-  #     - "sherpa-onnx/csrc/*"
-  #     - "sherpa-onnx/c-api/*"
-  #     - "toolchains/arm-linux-gnueabihf.toolchain.cmake"
-  #   tags:
-  #     - "v[0-9]+.[0-9]+.[0-9]+*"
-
   workflow_dispatch:
 
 concurrency:
@@ -63,6 +51,12 @@ jobs:
           arm-linux-gnueabihf-gcc --version
 
           gcc -x c - <<<'int main(){return 0;}' -o test && objdump -T ./test | grep GLIBC_
+
+      - name: cache-alsa
+        uses: actions/cache@v4
+        with:
+          key: alsa-lib
+          path: build-arm-linux-gnueabihf/alsa-lib
 
       - name: build arm-linux-gnueabihf
         shell: bash
@@ -118,24 +112,7 @@ jobs:
           tar cjvf ${dst}.tar.bz2 $dst
 
       - uses: actions/upload-artifact@v4
-        if: matrix.lib_type == 'shared'
-        with:
-          name: sherpa-onnx-linux-arm-gnueabihf-shared
-          path: sherpa-onnx-*linux-arm-gnueabihf-shared.tar.bz2
-
-      - uses: actions/upload-artifact@v4
         if: matrix.lib_type == 'static'
         with:
           name: sherpa-onnx-linux-arm-gnueabihf-static
           path: sherpa-onnx-*linux-arm-gnueabihf-static.tar.bz2
-
-      # - name: ZIP alsa-lib
-      #   shell: bash
-      #   run: |
-      #     cd build-arm-linux-gnueabihf
-      #     tar cjvf alsa-lib.tar.bz2 alsa-lib
-
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: alsa-lib
-      #     path: build-arm-linux-gnueabihf/alsa-lib.tar.bz2
