@@ -126,6 +126,15 @@ as the device_name.
 
   int32_t segment_index = 0;
 
+  // 双缓冲实现
+  std::vector<float> buffer1, buffer2;
+  std::vector<float> *writing_buffer = &buffer1;
+  std::vector<float> *processing_buffer = &buffer2;
+  std::mutex buffer_mutex;
+  std::condition_variable buffer_cv;
+  bool buffer_ready = false;
+  bool started = false;
+
   // 处理线程
   std::thread processing_thread([&]() {
     while (!stop) {
