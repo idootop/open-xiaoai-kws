@@ -3,6 +3,11 @@ name: open-xiaoai
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version information (e.g., 1.20.0)"
+        required: false
+        default: "1.14.0"
 
 concurrency:
   group: arm-linux-gnueabihf-${{ github.ref }}
@@ -90,8 +95,11 @@ jobs:
           arm-linux-gnueabihf-strip --version
 
           SHERPA_ONNX_VERSION=v$(grep "SHERPA_ONNX_VERSION" ./CMakeLists.txt  | cut -d " " -f 2  | cut -d '"' -f 2)
+          echo $SHERPA_ONNX_VERSION > SHERPA_ONNX_VERSION
 
           dst=sherpa-onnx-${SHERPA_ONNX_VERSION}-linux-arm-gnueabihf-${{ matrix.lib_type }}
+          echo $dst > DIST_NAME
+
           mkdir $dst
 
           ls -lh build-arm-linux-gnueabihf/install/lib
@@ -109,10 +117,23 @@ jobs:
 
           tree $dst
 
-          tar cjvf ${dst}.tar.bz2 $dst
+          cd $dst/bin
+
+          zip -r ${DIST_NAME}.zip ./
 
       - uses: actions/upload-artifact@v4
-        if: matrix.lib_type == 'static'
         with:
-          name: sherpa-onnx-linux-arm-gnueabihf-static
-          path: sherpa-onnx-*linux-arm-gnueabihf-static.tar.bz2
+          name: ${{ env.DIST_NAME }}
+          path: ${{ env.DIST_NAME }}.zip
+
+      # - name: Upload v${{ env.SHERPA_ONNX_VERSION }}
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     allowUpdates: true
+      #     draft: false
+      #     removeArtifacts: true
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     name: v${{ env.SHERPA_ONNX_VERSION }}-${{ matrix.lib_type }}
+      #     tag: v${{ env.SHERPA_ONNX_VERSION }}-${{ matrix.lib_type }}
+      #     body: "${{ env.DIST_NAME }}"
+      #     artifacts: ${{ env.DIST_NAME }}.zip
