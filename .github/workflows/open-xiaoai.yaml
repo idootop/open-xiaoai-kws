@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version information (e.g., 1.20.0)"
+        description: "Release version (e.g., 1.0.0)"
         required: false
-        default: "1.14.0"
+        default: "1.0.0"
 
 concurrency:
   group: arm-linux-gnueabihf-${{ github.ref }}
@@ -94,46 +94,38 @@ jobs:
           export PATH=$GITHUB_WORKSPACE/toolchain/bin:$PATH
           arm-linux-gnueabihf-strip --version
 
-          SHERPA_ONNX_VERSION=v$(grep "SHERPA_ONNX_VERSION" ./CMakeLists.txt  | cut -d " " -f 2  | cut -d '"' -f 2)
-          echo $SHERPA_ONNX_VERSION > SHERPA_ONNX_VERSION
+          RELEASE_VERSION=${{ inputs.version }}
+          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
 
-          dst=sherpa-onnx-${SHERPA_ONNX_VERSION}-linux-arm-gnueabihf-${{ matrix.lib_type }}
-          echo $dst > DIST_NAME
+          dst=open-xiaoai-kws-v${RELEASE_VERSION}
+          echo "DIST_NAME=${dst}" >> $GITHUB_ENV
 
           mkdir $dst
 
           ls -lh build-arm-linux-gnueabihf/install/lib
-
           cp -a build-arm-linux-gnueabihf/install/bin $dst/
           ls -lh $dst/bin/*
           arm-linux-gnueabihf-strip $dst/bin/*
           ls -lh $dst
 
-          lib_type=${{ matrix.lib_type }}
-          if [[ $lib_type == "shared" ]]; then
-            cp -a build-arm-linux-gnueabihf/install/lib $dst/
-            rm -v $dst/lib/libasound.so
-          fi
-
           tree $dst
 
           cd $dst/bin
-
-          zip -r ${DIST_NAME}.zip ./
+          zip -r ${dst}.zip ./
 
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.DIST_NAME }}
           path: ${{ env.DIST_NAME }}.zip
 
-      # - name: Upload v${{ env.SHERPA_ONNX_VERSION }}
+      # - name: Upload v${{ env.RELEASE_VERSION }}
       #   uses: ncipollo/release-action@v1
       #   with:
       #     allowUpdates: true
       #     draft: false
       #     removeArtifacts: true
       #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     name: v${{ env.SHERPA_ONNX_VERSION }}-${{ matrix.lib_type }}
-      #     tag: v${{ env.SHERPA_ONNX_VERSION }}-${{ matrix.lib_type }}
-      #     body: "${{ env.DIST_NAME }}"
+      #     name: v${{ env.RELEASE_VERSION }}
+      #     tag: v${{ env.RELEASE_VERSION }}
+      #     body: ${{ env.DIST_NAME }}
       #     artifacts: ${{ env.DIST_NAME }}.zip
