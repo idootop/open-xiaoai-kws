@@ -318,8 +318,8 @@ if(NOT WIN32 AND NOT SHERPA_ONNX_ENABLE_WASM AND CMAKE_SYSTEM_NAME STREQUAL Linu
 endif()
 
 if(SHERPA_ONNX_ENABLE_BINARY)
-  add_executable(sherpa-onnx sherpa-onnx.cc)
-  add_executable(sherpa-onnx-keyword-spotter sherpa-onnx-keyword-spotter.cc)
+  # add_executable(sherpa-onnx sherpa-onnx.cc)
+  # add_executable(sherpa-onnx-keyword-spotter sherpa-onnx-keyword-spotter.cc)
   # add_executable(sherpa-onnx-offline sherpa-onnx-offline.cc)
   # add_executable(sherpa-onnx-offline-audio-tagging sherpa-onnx-offline-audio-tagging.cc)
   # add_executable(sherpa-onnx-offline-denoiser sherpa-onnx-offline-denoiser.cc)
@@ -338,8 +338,8 @@ if(SHERPA_ONNX_ENABLE_BINARY)
   endif()
 
   set(main_exes
-    sherpa-onnx
-    sherpa-onnx-keyword-spotter
+    # sherpa-onnx
+    # sherpa-onnx-keyword-spotter
     # sherpa-onnx-offline
     # sherpa-onnx-offline-audio-tagging
     # sherpa-onnx-offline-denoiser
@@ -463,10 +463,10 @@ if(SHERPA_ONNX_ENABLE_PORTAUDIO AND SHERPA_ONNX_ENABLE_BINARY)
     # )
   endif()
 
-  add_executable(sherpa-onnx-keyword-spotter-microphone
-    sherpa-onnx-keyword-spotter-microphone.cc
-    microphone.cc
-  )
+  # add_executable(sherpa-onnx-keyword-spotter-microphone
+  #   sherpa-onnx-keyword-spotter-microphone.cc
+  #   microphone.cc
+  # )
 
   # add_executable(sherpa-onnx-microphone
   #   sherpa-onnx-microphone.cc
@@ -504,7 +504,7 @@ if(SHERPA_ONNX_ENABLE_PORTAUDIO AND SHERPA_ONNX_ENABLE_BINARY)
   # )
 
   set(exes
-    sherpa-onnx-keyword-spotter-microphone
+    # sherpa-onnx-keyword-spotter-microphone
     # sherpa-onnx-microphone
     # sherpa-onnx-microphone-offline
     # sherpa-onnx-microphone-offline-audio-tagging

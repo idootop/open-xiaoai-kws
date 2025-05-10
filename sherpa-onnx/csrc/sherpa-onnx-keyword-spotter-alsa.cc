@@ -106,9 +106,9 @@ Usage:
     --provider=cpu \
     --num-threads=2 \
     --keywords-file=keywords.txt \
-    --chunk-size=1000 \
+    --chunk-size=1024 \
     --buffer-size=1365 \
-    --period-size=340 \
+    --period-size=170 \
     device_name
 
 Please refer to
@@ -148,6 +148,13 @@ as the device_name.
 
   po.Read(argc, argv);
 
+  fprintf(stderr, "%s\n", config.ToString().c_str());
+
+  if (!config.Validate()) {
+    fprintf(stderr, "Errors in config!\n");
+    return -1;
+  }
+
   // 限制参数在有效范围内
   buffer_size = std::max(buffer_size, 1365);
   period_size = std::max(period_size, 170);
@@ -157,12 +164,6 @@ as the device_name.
   fprintf(stderr, "Using period size: %d\n", period_size);
   fprintf(stderr, "Using chunk size: %d\n", chunk_size);
 
-  fprintf(stderr, "%s\n", config.ToString().c_str());
-
-  if (!config.Validate()) {
-    fprintf(stderr, "Errors in config!\n");
-    return -1;
-  }
   sherpa_onnx::KeywordSpotter spotter(config);
 
   int32_t expected_sample_rate = config.feat_config.sampling_rate;
