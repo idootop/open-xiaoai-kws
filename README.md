@@ -1,8 +1,5 @@
 # Open-XiaoAI x Sherpa-ONNX
 
-> [!IMPORTANT]
-> 本教程仅适用于 **小爱音箱 Pro（LX06）** 和 **Xiaomi 智能音箱 Pro（OH2P）**
-
 小爱音箱自定义唤醒词，基于 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)。
 
 ## 演示视频
@@ -14,7 +11,7 @@
 ## 快速开始
 
 > [!NOTE]
-> 以下操作需要先将小爱音箱刷机， 然后 SSH 连接到小爱音箱。👉 [教程](https://github.com/idootop/open-xiaoai/blob/main/docs/flash.md)
+> 以下操作需要先将小爱音箱刷机， 然后 SSH 连接到小爱音箱。相关教程 👉 [open-xiaoai](https://github.com/idootop/open-xiaoai)
 
 ```shell
 # 创建 open-xiaoai/kws 文件夹
@@ -149,3 +146,9 @@ curl -sSfL https://gitee.com/idootop/artifacts/releases/download/open-xiaoai-kws
 该脚本默认不支持自定义唤醒词触发后执行的动作。
 
 如果你想要自定义唤醒词的触发动作，可以参考 [open-xiaoai](https://github.com/idootop/open-xiaoai) 里的其他演示程序，根据 server 端接收到的小爱音箱上的唤醒词事件，实时触发任意自定义操作（比如：打电话，订外卖等）。
+
+### Q：我不是小爱音箱 Pro 能不能用？
+
+由于小爱音箱 client 端算力和存储空间有限，默认只使用了一个较小的[语音识别模型](https://k2-fsa.github.io/sherpa/onnx/kws/pretrained_models/index.html#sherpa-onnx-kws-pre-trained-models)（5MB 左右），需要占用大约 20 MB 的存储空间。其他型号的小爱音箱存储空间和算力可能不足以运行该模型，请自行测试。
+
+你也可以参考 [open-xiaoai](https://github.com/idootop/open-xiaoai) 里的演示程序，在 server 端运行更大规模、更先进的 AI 模型，来进行唤醒词识别，达到相同目的。推荐使用 [FunASR](https://github.com/modelscope/FunASR) 和 [Sherpa-ONNX](https://github.com/k2-fsa/sherpa-onnx)，可以参考 [xiaozhi-esp32-server](https://github.com/xinnan-tech/xiaozhi-esp32-server) 项目。
