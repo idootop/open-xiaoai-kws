@@ -126,7 +126,7 @@ jobs:
           draft: false
           removeArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: v${{ env.RELEASE_VERSION }}
           tag: v${{ env.RELEASE_VERSION }}
-          body: ${{ env.DIST_NAME }}
+          name: ${{ env.DIST_NAME }}
+          body: 小爱音箱自定义唤醒词，基于 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)。
           artifacts: ${{ env.DIST_NAME }}.zip
