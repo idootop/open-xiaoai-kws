@@ -1,4 +1,4 @@
-# Open-XiaoAI x Sherpa-ONNX
+# Open-XiaoAI KWS
 
 小爱音箱自定义唤醒词，基于 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)。
 
