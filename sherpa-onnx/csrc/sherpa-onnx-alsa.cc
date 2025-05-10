@@ -8,6 +8,10 @@
 #include <algorithm>
 #include <cctype>  // std::tolower
 #include <cstdint>
+#include <mutex>
+#include <thread>
+#include <atomic>
+#include <condition_variable>
 
 #include "sherpa-onnx/csrc/alsa.h"
 #include "sherpa-onnx/csrc/display.h"
