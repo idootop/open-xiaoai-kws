@@ -112,6 +112,7 @@ jobs:
 
           cd $dst/bin
           zip -r ${dst}.zip ./
+          mv ${dst}.zip $GITHUB_WORKSPACE/
 
       - uses: actions/upload-artifact@v4
         with:
